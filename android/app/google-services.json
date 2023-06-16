@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "367071444906",
+    "project_id": "whatsapp-42e5f",
+    "storage_bucket": "whatsapp-42e5f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:367071444906:android:cd1801117bb652f92a75d3",
+        "android_client_info": {
+          "package_name": "com.example.wahtsapp_clone"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "367071444906-gtg6qs35l1efv0ibgimi8avmhbqb6rtb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAsIzNWCKlCid-2GJo0ekMWArdxPT7rkqw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "367071444906-gtg6qs35l1efv0ibgimi8avmhbqb6rtb.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "367071444906-ogqmkll1fpqpr62nm8ubkirq5evijn97.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.wahtsappClone"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
