@@ -28,11 +28,13 @@ class _LoginState extends State<Login> {
                 ),
                 const SizedBox(height: 32),
                 const InputWidget(
+                  obscureText: false,
                   placeholder: "E-mail",
                   filled: true,
                 ),
                 const SizedBox(height: 8),
                 const InputWidget(
+                  obscureText: false,
                   placeholder: "Senha",
                   filled: true,
                   inputType: TextInputType.visiblePassword,

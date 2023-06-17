@@ -23,6 +23,7 @@ class MyApp extends StatelessWidget {
         //colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
         appBarTheme: const AppBarTheme(
+          backgroundColor: Color(0xff075E54),
           iconTheme: IconThemeData(
             color: Colors.white,
           ),
