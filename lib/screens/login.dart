@@ -1,5 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:validatorless/validatorless.dart';
 import 'package:wahtsapp_clone/screens/cadastro.dart';
+import 'package:wahtsapp_clone/screens/home.dart';
 import 'package:wahtsapp_clone/widgets/input.dart';
 
 class Login extends StatefulWidget {
@@ -10,6 +13,50 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
+  final _formKey = GlobalKey<FormState>();
+  final _controllerEmail = TextEditingController();
+  final _controllerSenha = TextEditingController();
+  String _message = '';
+
+  void _navigatorHome() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const Home()),
+    );
+  }
+
+  void _logarUsuario() {
+    FirebaseAuth auth = FirebaseAuth.instance;
+
+    auth.signInWithEmailAndPassword(
+      email: _controllerEmail.text,
+      password: _controllerSenha.text,
+    )
+        .then((firebaseException) {
+      _navigatorHome();
+    }).catchError((onError) {
+      setState(() {
+        _message =
+            "Erro ao fazer login, por favor verifique email e senha novamente";
+      });
+    });
+  }
+
+  Future _verificarUsuarioLogado() async {
+    FirebaseAuth auth = FirebaseAuth.instance;
+
+    User? usuarioLogado = await auth.currentUser;
+    if (usuarioLogado != null) {
+      _navigatorHome();
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _verificarUsuarioLogado();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,18 +73,30 @@ class _LoginState extends State<Login> {
                   width: 200,
                   height: 150,
                 ),
-                const SizedBox(height: 32),
-                const InputWidget(
-                  obscureText: false,
-                  placeholder: "E-mail",
-                  filled: true,
-                ),
-                const SizedBox(height: 8),
-                const InputWidget(
-                  obscureText: false,
-                  placeholder: "Senha",
-                  filled: true,
-                  inputType: TextInputType.visiblePassword,
+                Form(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      const SizedBox(height: 32),
+                      InputWidget(
+                        controller: _controllerEmail,
+                        obscureText: false,
+                        placeholder: "E-mail",
+                        filled: true,
+                        inputType: TextInputType.emailAddress,
+                        validator: Validatorless.required("Campo obrigatorio"),
+                      ),
+                      const SizedBox(height: 8),
+                      InputWidget(
+                        controller: _controllerSenha,
+                        obscureText: true,
+                        placeholder: "Senha",
+                        filled: true,
+                        inputType: TextInputType.visiblePassword,
+                        validator: Validatorless.required("Campo obrigatorio"),
+                      ),
+                    ],
+                  ),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: 16, bottom: 10),
@@ -48,7 +107,6 @@ class _LoginState extends State<Login> {
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(32)),
                     ),
-                    onPressed: () {},
                     child: const Text(
                       "Entrar",
                       style: TextStyle(
@@ -56,12 +114,20 @@ class _LoginState extends State<Login> {
                         fontSize: 20,
                       ),
                     ),
+                    onPressed: () {
+                      var formValid =
+                          _formKey.currentState?.validate() ?? false;
+
+                      if (formValid) {
+                        _logarUsuario();
+                      }
+                    },
                   ),
                 ),
                 Center(
                   child: GestureDetector(
                     child: const Text(
-                      "Não tem uma conta? Cadastre-se!",
+                      "Não tem uma conta ainda? Cadastre-se!",
                       style: TextStyle(
                         color: Colors.white,
                       ),
@@ -74,6 +140,17 @@ class _LoginState extends State<Login> {
                         ),
                       );
                     },
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 16),
+                  child: Center(
+                    child: Text(
+                      _message,
+                      style: const TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
                   ),
                 ),
               ],

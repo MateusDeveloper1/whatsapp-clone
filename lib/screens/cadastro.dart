@@ -20,11 +20,10 @@ class _CadastroState extends State<Cadastro> with ValidationsMixin {
   final _controllerSenha = TextEditingController();
   String _message = '';
 
-  _criaUsuario() {
-    String nome = _controllerName.text;
-    String email = _controllerEmail.text;
-    String senha = _controllerSenha.text;
 
+/*
+  _criaUsuario() {
+    
     Usuario usuario = Usuario();
     usuario.nome = nome;
     usuario.email = email;
@@ -32,14 +31,14 @@ class _CadastroState extends State<Cadastro> with ValidationsMixin {
 
     _cadastrarUsuario(usuario);
   }
-
-  _cadastrarUsuario(Usuario usario) {
+*/
+  void _cadastrarUsuario() {
     FirebaseAuth auth = FirebaseAuth.instance;
 
     auth
         .createUserWithEmailAndPassword(
-      email: usario.email,
-      password: usario.senha,
+      email: _controllerEmail.text,
+      password: _controllerSenha.text,
     )
         .then((firebaseUser) {
       Navigator.push(
@@ -136,7 +135,7 @@ class _CadastroState extends State<Cadastro> with ValidationsMixin {
                         var formValid =
                             _formKey.currentState?.validate() ?? false;
                         if (formValid) {
-                          _criaUsuario();
+                          _cadastrarUsuario();
                         }
                       },
                     ),
