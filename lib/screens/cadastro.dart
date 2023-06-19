@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:validatorless/validatorless.dart';
@@ -21,27 +22,35 @@ class _CadastroState extends State<Cadastro> with ValidationsMixin {
   String _message = '';
 
 
-/*
-  _criaUsuario() {
-    
+  void _criaUsuario(){
+    String nome = _controllerName.text;
+    String senha = _controllerSenha.text;
+    String email = _controllerEmail.text;
+
     Usuario usuario = Usuario();
     usuario.nome = nome;
-    usuario.email = email;
     usuario.senha = senha;
+    usuario.email = email;
 
     _cadastrarUsuario(usuario);
   }
-*/
-  void _cadastrarUsuario() {
+
+
+  
+  void _cadastrarUsuario(Usuario usuario) {
     FirebaseAuth auth = FirebaseAuth.instance;
 
-    auth
-        .createUserWithEmailAndPassword(
-      email: _controllerEmail.text,
-      password: _controllerSenha.text,
-    )
-        .then((firebaseUser) {
-      Navigator.push(
+    auth.createUserWithEmailAndPassword(
+      email: usuario.email,
+      password: usuario.senha,
+
+    ).then((firebaseUser) {
+      FirebaseFirestore db = FirebaseFirestore.instance;
+      db.collection("usuarios")
+      .doc(firebaseUser.user!.uid)
+      .set(usuario.toMap());
+
+      Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => const Home()),
       );
@@ -135,7 +144,7 @@ class _CadastroState extends State<Cadastro> with ValidationsMixin {
                         var formValid =
                             _formKey.currentState?.validate() ?? false;
                         if (formValid) {
-                          _cadastrarUsuario();
+                          _criaUsuario();
                         }
                       },
                     ),

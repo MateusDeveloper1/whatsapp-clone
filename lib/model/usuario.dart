@@ -1,9 +1,20 @@
 class Usuario {
-  late String? _nome;
-  late String? _email;
-  late String? _senha;
+  String? _nome;
+  String? _email;
+  String? _senha;
 
   Usuario();
+
+  
+  Map<String, dynamic> toMap() {
+    Map<String, dynamic> map = {
+      "nome": nome,
+      "email": email,
+    };
+    return map;
+  }
+
+
 
   get nome => _nome;
 

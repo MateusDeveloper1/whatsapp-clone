@@ -17,9 +17,10 @@ class _LoginState extends State<Login> {
   final _controllerEmail = TextEditingController();
   final _controllerSenha = TextEditingController();
   String _message = '';
+  
 
   void _navigatorHome() {
-    Navigator.push(
+    Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (context) => const Home()),
     );
@@ -32,7 +33,7 @@ class _LoginState extends State<Login> {
       email: _controllerEmail.text,
       password: _controllerSenha.text,
     )
-        .then((firebaseException) {
+        .then((firebaseUser) {
       _navigatorHome();
     }).catchError((onError) {
       setState(() {
@@ -45,7 +46,7 @@ class _LoginState extends State<Login> {
   Future _verificarUsuarioLogado() async {
     FirebaseAuth auth = FirebaseAuth.instance;
 
-    User? usuarioLogado = await auth.currentUser;
+    User? usuarioLogado = auth.currentUser;
     if (usuarioLogado != null) {
       _navigatorHome();
     }
