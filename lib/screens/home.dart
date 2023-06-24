@@ -10,7 +10,12 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
-  late TabController _tabController;
+  TabController? _tabController;
+
+  final List<String> itensMenu = [
+    "Configurações",
+    "Deslogar",
+  ];
 
   @override
   void initState() {
@@ -19,6 +24,16 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       length: 2,
       vsync: this,
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _tabController!.dispose();
+  }
+
+  void _escolhaMenuItem(String item) {
+    print("Escolha menu item: $item");
   }
 
   @override
@@ -45,6 +60,19 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
             Tab(text: "Contatos"),
           ],
         ),
+        actions: [
+          PopupMenuButton<String>(
+            onSelected: _escolhaMenuItem,
+            itemBuilder: (BuildContext context) {
+              return itensMenu.map((String item) {
+                return PopupMenuItem<String>(
+                  value: item,
+                  child: Text(item),
+                );
+              }).toList();
+            },
+          ),
+        ],
       ),
       body: TabBarView(
         controller: _tabController,

@@ -17,24 +17,24 @@ class _LoginState extends State<Login> {
   final _controllerEmail = TextEditingController();
   final _controllerSenha = TextEditingController();
   String _message = '';
-  
 
-  void _navigatorHome() {
+
+  void _redirecionarParaTela(BuildContext context){
     Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => const Home()),
-    );
+        context,
+        MaterialPageRoute(builder: (context) => const Home()),
+      );
   }
 
-  void _logarUsuario() {
+  void _logarUsuario(BuildContext context) {
     FirebaseAuth auth = FirebaseAuth.instance;
 
-    auth.signInWithEmailAndPassword(
+    auth
+        .signInWithEmailAndPassword(
       email: _controllerEmail.text,
       password: _controllerSenha.text,
-    )
-        .then((firebaseUser) {
-      _navigatorHome();
+    ).then((firebaseUser) {
+      _redirecionarParaTela(context);
     }).catchError((onError) {
       setState(() {
         _message =
@@ -43,19 +43,19 @@ class _LoginState extends State<Login> {
     });
   }
 
-  Future _verificarUsuarioLogado() async {
+  Future _verificarUsuarioLogado(BuildContext context) async {
     FirebaseAuth auth = FirebaseAuth.instance;
 
     User? usuarioLogado = auth.currentUser;
     if (usuarioLogado != null) {
-      _navigatorHome();
+      _redirecionarParaTela(context);
     }
   }
 
   @override
   void initState() {
     super.initState();
-    _verificarUsuarioLogado();
+    _verificarUsuarioLogado(context);
   }
 
   @override
@@ -120,7 +120,7 @@ class _LoginState extends State<Login> {
                           _formKey.currentState?.validate() ?? false;
 
                       if (formValid) {
-                        _logarUsuario();
+                        _logarUsuario(context);
                       }
                     },
                   ),
