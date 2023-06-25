@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:wahtsapp_clone/routeGenerator.dart';
 import 'package:wahtsapp_clone/screens/login.dart';
 
 void main() async {
@@ -31,6 +32,8 @@ class MyApp extends StatelessWidget {
           ),
         ),
       ),
+      initialRoute: "/",
+      onGenerateRoute: RouteGenerator.generateRoute,
       home: const Login(),
     );
   }

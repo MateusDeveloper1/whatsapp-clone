@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:validatorless/validatorless.dart';
 import 'package:wahtsapp_clone/screens/cadastro.dart';
-import 'package:wahtsapp_clone/screens/home.dart';
 import 'package:wahtsapp_clone/widgets/input.dart';
 
 class Login extends StatefulWidget {
@@ -18,12 +17,10 @@ class _LoginState extends State<Login> {
   final _controllerSenha = TextEditingController();
   String _message = '';
 
-
-  void _redirecionarParaTela(BuildContext context){
-    Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const Home()),
-      );
+  _redirecionarParaTela(BuildContext context) {
+    Future.delayed(Duration.zero, () {
+      Navigator.pushReplacementNamed(context, "/home");
+    });
   }
 
   void _logarUsuario(BuildContext context) {
@@ -33,7 +30,8 @@ class _LoginState extends State<Login> {
         .signInWithEmailAndPassword(
       email: _controllerEmail.text,
       password: _controllerSenha.text,
-    ).then((firebaseUser) {
+    )
+        .then((firebaseUser) {
       _redirecionarParaTela(context);
     }).catchError((onError) {
       setState(() {

@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:validatorless/validatorless.dart';
 import 'package:wahtsapp_clone/mixin/validator.dart';
 import 'package:wahtsapp_clone/model/usuario.dart';
-import 'package:wahtsapp_clone/screens/home.dart';
 import 'package:wahtsapp_clone/widgets/input.dart';
 
 class Cadastro extends StatefulWidget {
@@ -21,8 +20,7 @@ class _CadastroState extends State<Cadastro> with ValidationsMixin {
   final _controllerSenha = TextEditingController();
   String _message = '';
 
-
-  void _criaUsuario(){
+  void _criaUsuario(BuildContext context) {
     String nome = _controllerName.text;
     String senha = _controllerSenha.text;
     String email = _controllerEmail.text;
@@ -32,28 +30,28 @@ class _CadastroState extends State<Cadastro> with ValidationsMixin {
     usuario.senha = senha;
     usuario.email = email;
 
-    _cadastrarUsuario(usuario);
+    _cadastrarUsuario(context, usuario);
   }
 
-
-  
-  void _cadastrarUsuario(Usuario usuario) {
+  void _cadastrarUsuario(BuildContext context, Usuario usuario) {
     FirebaseAuth auth = FirebaseAuth.instance;
 
-    auth.createUserWithEmailAndPassword(
+    auth
+        .createUserWithEmailAndPassword(
       email: usuario.email,
       password: usuario.senha,
-
-    ).then((firebaseUser) {
+    )
+        .then((firebaseUser) {
       FirebaseFirestore db = FirebaseFirestore.instance;
-      db.collection("usuarios")
-      .doc(firebaseUser.user!.uid)
-      .set(usuario.toMap());
+      db
+          .collection("usuarios")
+          .doc(firebaseUser.user!.uid)
+          .set(usuario.toMap());
 
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const Home()),
-      );
+      Future.delayed(Duration.zero, () {
+        Navigator.restorablePushNamedAndRemoveUntil(
+            context, "/home", (route) => false);
+      });
     }).catchError((onError) {
       _message = "Erro ao cadastrar, digite os dados novamente";
     });
@@ -144,7 +142,7 @@ class _CadastroState extends State<Cadastro> with ValidationsMixin {
                         var formValid =
                             _formKey.currentState?.validate() ?? false;
                         if (formValid) {
-                          _criaUsuario();
+                          _criaUsuario(context);
                         }
                       },
                     ),

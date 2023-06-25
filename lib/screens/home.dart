@@ -1,4 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:wahtsapp_clone/screens/login.dart';
 import 'package:wahtsapp_clone/tabs/abaContato.dart';
 import 'package:wahtsapp_clone/tabs/abaConversa.dart';
 
@@ -33,7 +35,29 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   }
 
   void _escolhaMenuItem(String item) {
-    print("Escolha menu item: $item");
+    switch (item) {
+      case 'Configurações':
+        print('Configurações');
+        break;
+
+      case 'Deslogar':
+        _deslogarUsuario(context);
+        break;
+    }
+  }
+
+  void _deslogarUsuario(BuildContext context) async {
+    FirebaseAuth auth = FirebaseAuth.instance;
+    await auth.signOut();
+
+    if (context.mounted) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const Login(),
+        ),
+      );
+    }
   }
 
   @override
